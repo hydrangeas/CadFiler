@@ -1,3 +1,5 @@
+using CadFile.Domain.Entities;
+using CadFile.Domain.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -22,6 +24,8 @@ namespace CadFilerTest.Tests
                     Convert.ToDateTime("2019/11/07 23:45"),
                     Convert.ToDateTime("2019/11/07 23:45")
                 ));
+            cadFileMock.Setup(x => x.GetData()).Returns(entities);
+
             var viewModel = new MainWindowViewModel(cadFileMock.Object);
             viewModel.CadFiles.Count.Is(2);
         }
