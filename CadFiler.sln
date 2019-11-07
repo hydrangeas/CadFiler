@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadFilerTest.Tests", "CadFi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadFile.Domain", "CadFile.Domain\CadFile.Domain.csproj", "{66A21C6A-7F30-4318-95AB-D60558577F74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadFiler.Infrastructure", "CadFiler.Infrastructure\CadFiler.Infrastructure.csproj", "{89991B72-842B-4B3B-9FBF-CCFF045BE3E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{66A21C6A-7F30-4318-95AB-D60558577F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A21C6A-7F30-4318-95AB-D60558577F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A21C6A-7F30-4318-95AB-D60558577F74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89991B72-842B-4B3B-9FBF-CCFF045BE3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89991B72-842B-4B3B-9FBF-CCFF045BE3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89991B72-842B-4B3B-9FBF-CCFF045BE3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89991B72-842B-4B3B-9FBF-CCFF045BE3E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
