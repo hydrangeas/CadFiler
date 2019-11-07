@@ -1,5 +1,7 @@
 using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
+using CadFiler.UI.ViewModels;
+using ChainingAssertion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -27,7 +29,7 @@ namespace CadFilerTest.Tests
             cadFileMock.Setup(x => x.GetData()).Returns(entities);
 
             var viewModel = new MainWindowViewModel(cadFileMock.Object);
-            viewModel.CadFiles.Count.Is(2);
+            viewModel.CadFiles.Count.Is(1);
         }
     }
 }

@@ -8,7 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ChainingAssertion" Version="1.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CadFile.Domain\CadFile.Domain.csproj" />
+    <ProjectReference Include="..\CadFiler.Infrastructure\CadFiler.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
