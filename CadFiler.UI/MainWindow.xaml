@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="300" MinWidth="300">
     <Grid>
-        <DataGrid x:Name="CadFileDataGrid" AllowDrop="True"/>
+        <DataGrid x:Name="CadFileDataGrid"/>
     </Grid>
 </Window>
