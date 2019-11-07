@@ -14,4 +14,10 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CadFile.Domain\CadFile.Domain.csproj" />
+    <ProjectReference Include="..\CadFiler.Infrastructure\CadFiler.Infrastructure.csproj" />
+    <ProjectReference Include="..\CadFiler.UI\CadFiler.UI.csproj" />
+  </ItemGroup>
+
 </Project>
