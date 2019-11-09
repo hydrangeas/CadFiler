@@ -1,4 +1,5 @@
 ﻿using CadFile.Domain.Repositories;
+using CadFiler.Infrastructure.LocalDB;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,11 @@ namespace CadFiler.UI.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private ICadFileRepository _cadFile;
+        public MainWindowViewModel()
+            :this(new CadFiles())
+        {
+
+        }
         public MainWindowViewModel(ICadFileRepository cadFile)
         {
             _cadFile = cadFile;

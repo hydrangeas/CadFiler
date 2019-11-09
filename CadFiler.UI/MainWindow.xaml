@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="300" MinWidth="300">
     <Grid>
-        <DataGrid x:Name="CadFileDataGrid"/>
+        <DataGrid x:Name="CadFileDataGrid"
+                  ItemsSource="{Binding CadFiles, Mode=OneWay}"/>
     </Grid>
 </Window>
