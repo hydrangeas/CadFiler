@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ChainingAssertion" Version="1.7.1" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
