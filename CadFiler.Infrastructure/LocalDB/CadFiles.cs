@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CadFiler.Infrastructure.LocalDB
 {
-    public class CadFiles : ICadFileRepository
+    public class CadFiles : ICadFileMetadataRepository
     {
         readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ower\source\repos\CadFiler\CadFiler.Infrastructure\LocalDB\SampleData\CadFile.mdf;Integrated Security=True";
 

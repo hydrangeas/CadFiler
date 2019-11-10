@@ -9,13 +9,13 @@ namespace CadFiler.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ICadFileRepository _cadFile;
+        private ICadFileMetadataRepository _cadFile;
         public MainWindowViewModel()
             :this(new CadFiles())
         {
 
         }
-        public MainWindowViewModel(ICadFileRepository cadFile)
+        public MainWindowViewModel(ICadFileMetadataRepository cadFile)
         {
             _cadFile = cadFile;
             foreach(var entity in _cadFile.GetData())

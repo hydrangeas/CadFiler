@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CadFile.Domain.Repositories
 {
-    public interface ICadFileRepository
+    public interface ICadFileMetadataRepository
     {
         IReadOnlyList<CadFileEntity> GetData();
     }

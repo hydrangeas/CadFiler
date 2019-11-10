@@ -27,5 +27,14 @@ namespace CadFiler.UI.ViewModels
 
             return true;
         }
+
+        public virtual DateTime GetDateTime()
+        {
+            return DateTime.Now;
+        }
+        public virtual Guid GetNewGuid()
+        {
+            return Guid.NewGuid();
+        }
     }
 }

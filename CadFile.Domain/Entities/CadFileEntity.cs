@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace CadFile.Domain.Entities
 {
     public sealed class CadFileEntity
     {
+        public CadFileEntity(FileInfo fileInfo,
+                             Guid physicalFileName,
+                             int displayOrder,
+                             DateTime created)
+            :this(
+                 fileInfo.Name,
+                 physicalFileName,
+                 fileInfo.Length,
+                 displayOrder,
+                 created,
+                 created
+                 )
+        {
+        }
+
         public CadFileEntity(string logicalFileName,
                              Guid physicalFileName,
                              long fileSize,
