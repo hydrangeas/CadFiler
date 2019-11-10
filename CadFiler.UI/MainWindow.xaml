@@ -8,6 +8,19 @@
         Title="MainWindow" MinHeight="300" MinWidth="300">
     <Grid>
         <DataGrid x:Name="CadFileDataGrid"
-                  ItemsSource="{Binding CadFiles, Mode=OneWay}"/>
+                  ItemsSource="{Binding CadFiles, Mode=OneWay}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ファイル名"
+                                    Binding="{Binding LogicalFileName}"/>
+                <DataGridTextColumn Header="内部ID"
+                                    Binding="{Binding PhysicalFileName}"/>
+                <DataGridTextColumn Header="ファイルサイズ"
+                                    Binding="{Binding FileSize}"/>
+                <DataGridTextColumn Header="最終更新日時"
+                                    Binding="{Binding Updated}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
