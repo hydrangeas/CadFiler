@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 
 namespace CadFilerTest.Tests
 {
@@ -60,10 +60,6 @@ namespace CadFilerTest.Tests
         [TestMethod]
         public void ファイルドロップ()
         {
-            var fileInfoMock = new Mock<IFileInfo>();
-            fileInfoMock.Setup(x => x.Name).Returns("test123.stl");
-            fileInfoMock.Setup(x => x.Length).Returns(2048);
-
             var cadFileMock = new Mock<ICadFileMetadataRepository>();
             var entities = new List<CadFileEntity>();
             entities.Add(
@@ -89,20 +85,26 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Created.Is(Convert.ToDateTime("2019/11/07 23:45"));
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/07 23:46"));
 
+            var fileInfoMock = new Mock<IFileInfo>();
+            fileInfoMock.Setup(x => x.Name).Returns("test123.stl");
+            fileInfoMock.Setup(x => x.Length).Returns(2048);
 
-            //entities.Add(
-            //    new CadFileEntity(
-            //        fileInfoMock.Object,
-            //        new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"),
-            //        1,
-            //        Convert.ToDateTime("2019/11/10 12:34:56")
-            //    ));
-            //viewModel.CadFiles[1].LogicalFileName.Is("test123.stl");
-            //viewModel.CadFiles[1].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
-            //viewModel.CadFiles[1].FileSize.Is(2048);
-            //viewModel.CadFiles[1].DisplayOrder.Is(1);
-            //viewModel.CadFiles[1].Created.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
-            //viewModel.CadFiles[1].Updated.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
+            //viewModel.Save();
+            viewModel.CadFiles.Add(
+                new MainWindowViewModelCadFile(
+                    new CadFileEntity(
+                        fileInfoMock.Object,
+                        new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"),
+                        1,
+                        Convert.ToDateTime("2019/11/10 12:34:56")
+                )));
+            viewModel.CadFiles.Count.Is(2);
+            viewModel.CadFiles[1].LogicalFileName.Is("test123.stl");
+            viewModel.CadFiles[1].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
+            viewModel.CadFiles[1].FileSize.Is(2048);
+            viewModel.CadFiles[1].DisplayOrder.Is(1);
+            viewModel.CadFiles[1].Created.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
+            viewModel.CadFiles[1].Updated.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
         }
     }
 }

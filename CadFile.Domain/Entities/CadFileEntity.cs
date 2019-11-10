@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.FileProviders;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -7,7 +8,7 @@ namespace CadFile.Domain.Entities
 {
     public sealed class CadFileEntity
     {
-        public CadFileEntity(FileInfo fileInfo,
+        public CadFileEntity(IFileInfo fileInfo,
                              Guid physicalFileName,
                              int displayOrder,
                              DateTime created)

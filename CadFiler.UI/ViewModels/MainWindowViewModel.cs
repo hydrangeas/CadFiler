@@ -26,5 +26,10 @@ namespace CadFiler.UI.ViewModels
 
         public ObservableCollection<MainWindowViewModelCadFile> CadFiles
         { get; set; } = new ObservableCollection<MainWindowViewModelCadFile>();
+
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
