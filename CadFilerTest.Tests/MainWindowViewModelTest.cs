@@ -2,12 +2,14 @@ using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
 using CadFiler.UI.ViewModels;
 using ChainingAssertion;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace CadFilerTest.Tests
 {
@@ -89,15 +91,17 @@ namespace CadFilerTest.Tests
             fileInfoMock.Setup(x => x.Name).Returns("test123.stl");
             fileInfoMock.Setup(x => x.Length).Returns(2048);
 
-            //viewModel.Save();
-            viewModel.CadFiles.Add(
-                new MainWindowViewModelCadFile(
-                    new CadFileEntity(
-                        fileInfoMock.Object,
-                        new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"),
-                        1,
-                        Convert.ToDateTime("2019/11/10 12:34:56")
-                )));
+            var dropInfoMock = new Mock<IDropInfo>();
+            dropInfoMock.Setup(x => x.Data).Returns(new DataObject("test123.stl"));
+            viewModel.Drop(dropInfoMock.Object);
+            //viewModel.CadFiles.Add(
+            //    new MainWindowViewModelCadFile(
+            //        new CadFileEntity(
+            //            fileInfoMock.Object,
+            //            new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"),
+            //            1,
+            //            Convert.ToDateTime("2019/11/10 12:34:56")
+            //    )));
             viewModel.CadFiles.Count.Is(2);
             viewModel.CadFiles[1].LogicalFileName.Is("test123.stl");
             viewModel.CadFiles[1].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
