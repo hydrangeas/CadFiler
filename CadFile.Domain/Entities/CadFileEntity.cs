@@ -15,8 +15,8 @@ namespace CadFile.Domain.Entities
         {
             LogicalFileName = logicalFileName;
             PhysicalFileName = physicalFileName;
-            fileSize = FileSize;
-            displayOrder = DisplayOrder;
+            FileSize = fileSize;
+            DisplayOrder = displayOrder;
             Created = created;
             Updated = updated;
         }
