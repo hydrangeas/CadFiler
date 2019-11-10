@@ -1,11 +1,11 @@
-﻿using CadFile.Domain.Repositories;
+﻿using CadFile.Domain.Entities;
+using CadFile.Domain.Repositories;
 using CadFiler.Infrastructure.LocalDB;
 using GongSolutions.Wpf.DragDrop;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.FileProviders;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace CadFiler.UI.ViewModels
@@ -38,7 +38,17 @@ namespace CadFiler.UI.ViewModels
             var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
             foreach(var file in dragFileList)
             {
-                System.Diagnostics.Debug.WriteLine($"{file}");
+                var directoryName = Path.GetDirectoryName(file);
+                var fileName = Path.GetFileName(file);
+
+                var physicalFileProvider = new PhysicalFileProvider(directoryName);
+                CadFiles.Add(
+                    new MainWindowViewModelCadFile(
+                        new CadFileEntity(
+                            physicalFileProvider.GetFileInfo(fileName),
+                            GetNewGuid(),
+                            CadFiles.Max(x => x.DisplayOrder) + 1,
+                            GetDateTime())));
             }
         }
     }
