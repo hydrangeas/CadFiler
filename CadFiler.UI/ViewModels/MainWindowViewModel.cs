@@ -26,10 +26,7 @@ namespace CadFiler.UI.ViewModels
         {
             _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
-            foreach (var entity in _cadFileMetadata.GetData())
-            {
-                CadFiles.Add(new MainWindowViewModelCadFile(entity));
-            }
+            Update();
         }
 
         public ObservableCollection<MainWindowViewModelCadFile> CadFiles
@@ -52,7 +49,11 @@ namespace CadFiler.UI.ViewModels
                             GetDateTime()
                         ));
             }
+            Update();
+        }
 
+        void Update()
+        {
             CadFiles.Clear();
             foreach (var entity in _cadFileMetadata.GetData())
             {
