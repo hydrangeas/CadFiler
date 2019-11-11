@@ -1,5 +1,6 @@
 ﻿using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -45,6 +46,11 @@ SELECT [id]
                 }
             }
             return result;
+        }
+
+        public void Save(IFileInfo fileInfo)
+        {
+            throw new NotImplementedException();
         }
     }
 }

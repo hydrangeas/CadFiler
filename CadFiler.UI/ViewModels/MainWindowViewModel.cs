@@ -12,16 +12,18 @@ namespace CadFiler.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IDropTarget
     {
-        private ICadFileMetadataRepository _cadFile;
+        private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
-            : this(new CadFiles())
+            : this(null, new CadFiles())
         {
 
         }
-        public MainWindowViewModel(ICadFileMetadataRepository cadFile)
+        public MainWindowViewModel(
+            ICadFileRepository cadFile,
+            ICadFileMetadataRepository cadFileMetadata)
         {
-            _cadFile = cadFile;
-            foreach (var entity in _cadFile.GetData())
+            _cadFileMetadata = cadFileMetadata;
+            foreach (var entity in _cadFileMetadata.GetData())
             {
                 CadFiles.Add(new MainWindowViewModelCadFile(entity));
             }
