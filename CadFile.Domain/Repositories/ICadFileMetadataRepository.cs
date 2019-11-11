@@ -9,6 +9,6 @@ namespace CadFile.Domain.Repositories
     public interface ICadFileMetadataRepository
     {
         IReadOnlyList<CadFileEntity> GetData();
-        void Save(IFileInfo fileInfo);
+        void Save(CadFileEntity cadFile);
     }
 }

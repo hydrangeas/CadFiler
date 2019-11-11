@@ -48,7 +48,7 @@ SELECT [id]
             return result;
         }
 
-        public void Save(IFileInfo fileInfo)
+        public void Save(CadFileEntity cadFileEntity)
         {
             throw new NotImplementedException();
         }

@@ -2,9 +2,7 @@
 using CadFile.Domain.Repositories;
 using CadFiler.Infrastructure.LocalDB;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Extensions.FileProviders;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 
@@ -12,6 +10,7 @@ namespace CadFiler.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IDropTarget
     {
+        private ICadFileRepository _cadFile;
         private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
             : this(null, new CadFiles())
@@ -22,6 +21,7 @@ namespace CadFiler.UI.ViewModels
             ICadFileRepository cadFile,
             ICadFileMetadataRepository cadFileMetadata)
         {
+            _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
             foreach (var entity in _cadFileMetadata.GetData())
             {
@@ -40,17 +40,20 @@ namespace CadFiler.UI.ViewModels
             var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
             foreach(var file in dragFileList)
             {
-                var directoryName = Path.GetDirectoryName(file);
-                var fileName = Path.GetFileName(file);
-
-                var physicalFileProvider = new PhysicalFileProvider(directoryName);
-                CadFiles.Add(
-                    new MainWindowViewModelCadFile(
-                        new CadFileEntity(
-                            physicalFileProvider.GetFileInfo(fileName),
+                var fileInfo = _cadFile.Save(file);
+                _cadFileMetadata.Save(
+                    new CadFileEntity(
+                            fileInfo,
                             GetNewGuid(),
                             CadFiles.Max(x => x.DisplayOrder) + 1,
-                            GetDateTime())));
+                            GetDateTime()
+                        ));
+            }
+
+            CadFiles.Clear();
+            foreach (var entity in _cadFileMetadata.GetData())
+            {
+                CadFiles.Add(new MainWindowViewModelCadFile(entity));
             }
         }
     }

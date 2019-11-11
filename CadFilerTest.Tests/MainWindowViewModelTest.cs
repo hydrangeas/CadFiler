@@ -98,6 +98,17 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/07 23:46"));
 
             //-- ここからファイルドロップ
+            cadFileMetadataMock.Setup(x => x.Save(It.IsAny<CadFileEntity>()))
+                .Callback<CadFileEntity>(value =>
+                {
+                    value.LogicalFileName.Is("test123.stl");
+                    value.PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
+                    value.FileSize.Is(2048);
+                    value.DisplayOrder.Is(2);
+                    value.Created.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
+                    value.Updated.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
+                });
+
             var fileDropList = new DataObject();
             fileDropList.SetFileDropList(new StringCollection {
                 @"C:\public\test123.stl"
@@ -105,13 +116,8 @@ namespace CadFilerTest.Tests
             var dropInfoMock = new Mock<IDropInfo>();
             dropInfoMock.Setup(x => x.Data).Returns(fileDropList);
 
-            viewModel.CadFiles.Count.Is(2);
-            viewModel.CadFiles[1].LogicalFileName.Is("test123.stl");
-            viewModel.CadFiles[1].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
-            viewModel.CadFiles[1].FileSize.Is(2048);
-            viewModel.CadFiles[1].DisplayOrder.Is(2);
-            viewModel.CadFiles[1].Created.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
-            viewModel.CadFiles[1].Updated.Is(Convert.ToDateTime("2019/11/10 12:34:56"));
+            viewModel.Drop(dropInfoMock.Object);
+            cadFileMetadataMock.VerifyAll();
         }
     }
 }
