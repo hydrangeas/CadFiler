@@ -1,6 +1,7 @@
 ﻿using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
 using CadFiler.Infrastructure.LocalDB;
+using CadFiler.Infrastructure.LocalFile;
 using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace CadFiler.UI.ViewModels
         private ICadFileRepository _cadFile;
         private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
-            : this(null, new CadFileMetadata())
+            : this(
+                  new CadFiles(),
+                  new CadFileMetadata())
         {
 
         }
