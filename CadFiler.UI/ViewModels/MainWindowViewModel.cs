@@ -13,7 +13,7 @@ namespace CadFiler.UI.ViewModels
         private ICadFileRepository _cadFile;
         private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
-            : this(null, new CadFiles())
+            : this(null, new CadFileMetadata())
         {
 
         }

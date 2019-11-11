@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CadFiler.Infrastructure.LocalDB
 {
-    public class CadFiles : ICadFileMetadataRepository
+    public class CadFileMetadata : ICadFileMetadataRepository
     {
         readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ower\source\repos\CadFiler\CadFiler.Infrastructure\LocalDB\SampleData\CadFile.mdf;Integrated Security=True";
 
@@ -50,7 +50,43 @@ SELECT [id]
 
         public void Save(CadFileEntity cadFileEntity)
         {
-            throw new NotImplementedException();
+            string insert = @"
+INSERT INTO metadata
+(logical_name, physical_name, file_size, display_order, created, updated)
+VALUES
+(@logical_name, @physical_name, @file_size, @display_order, @created, @updated)
+";
+            string update = @"
+UPDATE metadata
+SET logical_name = @logical_name
+   ,file_size = @file_size
+   ,display_order = @display_order
+   ,updated = @updated
+WHERE physical_name = @physical_name
+";
+
+
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(update, connection))
+            {
+                connection.Open();
+                var parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("@logical_name", cadFileEntity.LogicalFileName),
+                    new SqlParameter("@physical_name", cadFileEntity.PhysicalFileName),
+                    new SqlParameter("@file_size", cadFileEntity.FileSize),
+                    new SqlParameter("@display_order", cadFileEntity.DisplayOrder),
+                    new SqlParameter("@created", cadFileEntity.Created),
+                    new SqlParameter("@updated", cadFileEntity.Updated)
+                };
+                command.Parameters.AddRange(parameters.ToArray());
+
+                if (command.ExecuteNonQuery() < 1)
+                {
+                    command.CommandText = insert;
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
