@@ -43,7 +43,7 @@ namespace CadFilerTest.Tests
                 ));
             cadFileMock.Setup(x => x.GetData()).Returns(entities);
 
-            var viewModel = new MainWindowViewModel(null, cadFileMock.Object);
+            var viewModel = new MainWindowViewModel(null, null, cadFileMock.Object);
             viewModel.CadFiles.Count.Is(2);
 
             viewModel.CadFiles[0].LogicalFileName.Is("test.stl");
@@ -84,6 +84,7 @@ namespace CadFilerTest.Tests
             cadFileMock.Setup(x => x.GetFileInfo(@"C:\public\test123.stl")).Returns(fileInfoMock.Object);
 
             var viewModelMock = new Mock<MainWindowViewModel>(
+                null,
                 cadFileMock.Object,
                 cadFileMetadataMock.Object);
             viewModelMock.Setup(x => x.GetDateTime()).Returns(Convert.ToDateTime("2019/11/10 12:34:56"));

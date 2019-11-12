@@ -11,19 +11,23 @@ namespace CadFiler.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IDropTarget
     {
+        private ICadFileStorageRepository _cadFileStorage;
         private ICadFileRepository _cadFile;
         private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
             : this(
+                  null,
                   new CadFiles(),
                   new CadFileMetadata())
         {
 
         }
         public MainWindowViewModel(
+            ICadFileStorageRepository cadFileStorage,
             ICadFileRepository cadFile,
             ICadFileMetadataRepository cadFileMetadata)
         {
+            _cadFileStorage = cadFileStorage;
             _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
             Update();
