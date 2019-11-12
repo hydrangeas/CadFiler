@@ -20,7 +20,13 @@ namespace CadFiler.Infrastructure.Azure.BlobStorage
             throw new NotImplementedException();
         }
 
-        public Task Upload(IFileInfo fileInfo)
+        /// <summary>
+        /// Azure Blob Storage へファイルアップロードを行う
+        /// </summary>
+        /// <param name="fileInfo">ファイル情報</param>
+        /// <param name="guid">アップロード用ファイル名</param>
+        /// <returns>なし</returns>
+        public Task Upload(IFileInfo fileInfo, Guid guid)
         {
             return Task.Run(async () =>
             {
@@ -30,7 +36,7 @@ namespace CadFiler.Infrastructure.Azure.BlobStorage
 
                 await cloudBlobContainer.CreateIfNotExistsAsync();
 
-                var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileInfo.Name);
+                var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(guid.ToString());
                 await cloudBlockBlob.UploadFromFileAsync(fileInfo.PhysicalPath);
             });
         }

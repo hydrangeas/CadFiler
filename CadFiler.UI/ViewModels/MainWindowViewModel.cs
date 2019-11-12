@@ -46,11 +46,12 @@ namespace CadFiler.UI.ViewModels
             foreach(var file in dragFileList)
             {
                 var fileInfo = _cadFile.GetFileInfo(file);
-                _cadFileStorage.Upload(fileInfo);
+                var physicalFileName = GetNewGuid();
+                _cadFileStorage.Upload(fileInfo, physicalFileName);
                 _cadFileMetadata.Save(
                     new CadFileEntity(
                             fileInfo,
-                            GetNewGuid(),
+                            physicalFileName,
                             CadFiles.Max(x => x.DisplayOrder) + 1,
                             GetDateTime()
                         ));
