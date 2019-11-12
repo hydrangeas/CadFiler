@@ -1,5 +1,6 @@
 ﻿using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
+using CadFiler.Infrastructure.Azure.BlobStorage;
 using CadFiler.Infrastructure.LocalDB;
 using CadFiler.Infrastructure.LocalFile;
 using GongSolutions.Wpf.DragDrop;
@@ -16,7 +17,7 @@ namespace CadFiler.UI.ViewModels
         private ICadFileMetadataRepository _cadFileMetadata;
         public MainWindowViewModel()
             : this(
-                  null,
+                  new CadFileStorage(),
                   new CadFiles(),
                   new CadFileMetadata())
         {
@@ -45,6 +46,7 @@ namespace CadFiler.UI.ViewModels
             foreach(var file in dragFileList)
             {
                 var fileInfo = _cadFile.GetFileInfo(file);
+                _cadFileStorage.Upload(fileInfo);
                 _cadFileMetadata.Save(
                     new CadFileEntity(
                             fileInfo,
