@@ -9,7 +9,7 @@ namespace CadFiler.Infrastructure.LocalFile
 {
     public class CadFiles : ICadFileRepository
     {
-        public IFileInfo Save(string path)
+        public IFileInfo GetFileInfo(string path)
         {
             var physicalFileProvider = new PhysicalFileProvider(Path.GetDirectoryName(path));
             return physicalFileProvider.GetFileInfo(Path.GetFileName(path));

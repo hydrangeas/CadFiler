@@ -40,7 +40,7 @@ namespace CadFiler.UI.ViewModels
             var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
             foreach(var file in dragFileList)
             {
-                var fileInfo = _cadFile.Save(file);
+                var fileInfo = _cadFile.GetFileInfo(file);
                 _cadFileMetadata.Save(
                     new CadFileEntity(
                             fileInfo,

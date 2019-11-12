@@ -7,6 +7,6 @@ namespace CadFile.Domain.Repositories
 {
     public interface ICadFileRepository
     {
-        IFileInfo Save(string path);
+        IFileInfo GetFileInfo(string path);
     }
 }

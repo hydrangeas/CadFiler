@@ -81,7 +81,7 @@ namespace CadFilerTest.Tests
             fileInfoMock.Setup(x => x.Name).Returns("test123.stl");
             fileInfoMock.Setup(x => x.Length).Returns(2048);
             var cadFileMock = new Mock<ICadFileRepository>();
-            cadFileMock.Setup(x => x.Save(@"C:\public\test123.stl")).Returns(fileInfoMock.Object);
+            cadFileMock.Setup(x => x.GetFileInfo(@"C:\public\test123.stl")).Returns(fileInfoMock.Object);
 
             var viewModelMock = new Mock<MainWindowViewModel>(
                 cadFileMock.Object,
