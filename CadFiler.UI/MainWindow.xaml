@@ -19,7 +19,7 @@
         Title="CAD Filer"
         MinHeight="300" MinWidth="300" SizeToContent="WidthAndHeight">
     
-    <Grid dd:DragDrop.IsDragSource="True"
+    <Grid dd:DragDrop.IsDragSource="False"
           dd:DragDrop.IsDropTarget="True"
           dd:DragDrop.DropHandler="{Binding}">
         <DataGrid x:Name="CadFileDataGrid"
