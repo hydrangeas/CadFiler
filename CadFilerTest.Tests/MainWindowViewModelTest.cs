@@ -128,7 +128,7 @@ namespace CadFilerTest.Tests
         [TestMethod]
         public void メタデータ削除()
         {
-            var cadFileMock = new Mock<ICadFileMetadataRepository>();
+            var cadFileMetadataMock = new Mock<ICadFileMetadataRepository>();
             var entities = new List<CadFileEntity>();
             entities.Add(
                 new CadFileEntity(
@@ -148,9 +148,9 @@ namespace CadFilerTest.Tests
                     Convert.ToDateTime("2019/11/10 16:24"),
                     Convert.ToDateTime("2019/11/10 16:25")
                 ));
-            cadFileMock.Setup(x => x.GetData()).Returns(entities);
-
-            var viewModel = new MainWindowViewModel(null, null, cadFileMock.Object);
+            cadFileMetadataMock.Setup(x => x.GetData()).Returns(entities);
+            
+            var viewModel = new MainWindowViewModel(null, null, cadFileMetadataMock.Object);
             viewModel.CadFiles.Count.Is(2);
             viewModel.CadFiles[0].LogicalFileName.Is("test.stl");
             viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
@@ -159,8 +159,20 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Created.Is(Convert.ToDateTime("2019/11/07 23:45"));
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/07 23:46"));
 
-            entities.Where(x => !x.PhysicalFileName.Equals(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"))).ToList();
+            //entities = entities.Where(x => !x.PhysicalFileName.Equals(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563")))
+            //                   .ToList();
+
+            //cadFileMock.Setup(x => x.GetData()).Returns(entities);
+
+            cadFileMetadataMock.Setup(x => x.Delete(It.IsAny<Guid>()))
+                               .Callback<Guid>(value =>
+                               {
+                                   entities = entities.Where(x => !x.PhysicalFileName.Equals(value))
+                                                      .ToList();
+                                   cadFileMetadataMock.Setup(x => x.GetData()).Returns(entities);
+                               });
             viewModel.Delete(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
+
             viewModel.CadFiles.Count.Is(1);
             viewModel.CadFiles[0].LogicalFileName.Is("abc.stl");
             viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
