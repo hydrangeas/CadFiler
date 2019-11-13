@@ -47,7 +47,7 @@
                                     Padding="0"
                                     Width="21" Height="21"
                                     Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                    CommandParameter="{Binding PhysicalFileName.ToString()}">
+                                    CommandParameter="{Binding PhysicalFileName}">
                                 <materialDesign:PackIcon Kind="Delete"
                                                          Margin="0"
                                                          Padding="0"

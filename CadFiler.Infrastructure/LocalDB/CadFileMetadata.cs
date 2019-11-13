@@ -91,7 +91,21 @@ WHERE physical_name = @physical_name
 
         public void Delete(Guid physicalFileName)
         {
-            throw new NotImplementedException();
+            string delete = @"
+DELETE FROM metadata WHERE physical_name=@physical_name;
+";
+
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(delete, connection))
+            {
+                connection.Open();
+                var parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("@physical_name", physicalFileName.ToString()),
+                };
+                command.Parameters.AddRange(parameters.ToArray());
+                command.ExecuteNonQuery();
+            }
         }
     }
 }
