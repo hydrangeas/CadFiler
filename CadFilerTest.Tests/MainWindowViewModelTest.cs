@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace CadFilerTest.Tests
@@ -119,6 +120,55 @@ namespace CadFilerTest.Tests
 
             viewModel.Drop(dropInfoMock.Object);
             cadFileMetadataMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void メタデータ削除()
+        {
+            var cadFileMock = new Mock<ICadFileMetadataRepository>();
+            var entities = new List<CadFileEntity>();
+            entities.Add(
+                new CadFileEntity(
+                    "test.stl",
+                    new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"),
+                    1024,
+                    1,
+                    Convert.ToDateTime("2019/11/07 23:45"),
+                    Convert.ToDateTime("2019/11/07 23:46")
+                ));
+            entities.Add(
+                new CadFileEntity(
+                    "abc.stl",
+                    new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"),
+                    512,
+                    2,
+                    Convert.ToDateTime("2019/11/10 16:24"),
+                    Convert.ToDateTime("2019/11/10 16:25")
+                ));
+            cadFileMock.Setup(x => x.GetData()).Returns(entities);
+
+            var viewModel = new MainWindowViewModel(null, null, cadFileMock.Object);
+            viewModel.CadFiles.Count.Is(2);
+            viewModel.CadFiles[0].LogicalFileName.Is("test.stl");
+            viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
+            viewModel.CadFiles[0].FileSize.Is(1024);
+            viewModel.CadFiles[0].DisplayOrder.Is(1);
+            viewModel.CadFiles[0].Created.Is(Convert.ToDateTime("2019/11/07 23:45"));
+            viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/07 23:46"));
+
+            entities.Where(x => !x.PhysicalFileName.Equals(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"))).ToList();
+            viewModel.Delete("E93ECBD8-EB7F-4478-B99D-C1933EBA3563");
+            viewModel.CadFiles.Count.Is(1);
+            viewModel.CadFiles[0].LogicalFileName.Is("abc.stl");
+            viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
+            viewModel.CadFiles[0].FileSize.Is(512);
+            viewModel.CadFiles[0].DisplayOrder.Is(2);
+            viewModel.CadFiles[0].Created.Is(Convert.ToDateTime("2019/11/10 16:24"));
+            viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/10 16:25"));
+
+            entities.Where(x => !x.PhysicalFileName.Equals(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"))).ToList();
+            viewModel.Delete("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1");
+            viewModel.CadFiles.Count.Is(0);
         }
     }
 }
