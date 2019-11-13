@@ -60,7 +60,7 @@ namespace CadFiler.UI.ViewModels
                     new CadFileEntity(
                             fileInfo,
                             physicalFileName,
-                            CadFiles.Max(x => x.DisplayOrder) + 1,
+                            CadFiles.Count == 0 ? 1 : CadFiles.Max(x => x.DisplayOrder) + 1,
                             GetDateTime()
                         ));
             }
