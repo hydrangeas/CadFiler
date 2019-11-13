@@ -88,5 +88,10 @@ WHERE physical_name = @physical_name
                 }
             }
         }
+
+        public void Delete(Guid physicalFileName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

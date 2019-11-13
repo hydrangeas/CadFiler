@@ -4,9 +4,12 @@ using CadFiler.Infrastructure.Azure.BlobStorage;
 using CadFiler.Infrastructure.LocalDB;
 using CadFiler.Infrastructure.LocalFile;
 using GongSolutions.Wpf.DragDrop;
+using Prism.Commands;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CadFiler.UI.ViewModels
 {
@@ -31,11 +34,16 @@ namespace CadFiler.UI.ViewModels
             _cadFileStorage = cadFileStorage;
             _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
+
+            DeleteCommand = new DelegateCommand<Guid?>(Delete);
+
             Update();
         }
 
         public ObservableCollection<MainWindowViewModelCadFile> CadFiles
         { get; set; } = new ObservableCollection<MainWindowViewModelCadFile>();
+
+        public ICommand DeleteCommand { get; private set; }
 
         public void DragOver(IDropInfo dropInfo) => dropInfo.Effects = DragDropEffects.Copy;
 
@@ -66,6 +74,14 @@ namespace CadFiler.UI.ViewModels
             {
                 CadFiles.Add(new MainWindowViewModelCadFile(entity));
             }
+        }
+
+        public void Delete(Guid? physicalFileName)
+        {
+            if (physicalFileName == null) return;
+
+            _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
+            Update();
         }
     }
 }

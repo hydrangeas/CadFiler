@@ -10,5 +10,6 @@ namespace CadFile.Domain.Repositories
     {
         IReadOnlyList<CadFileEntity> GetData();
         void Save(CadFileEntity cadFile);
+        void Delete(Guid physicalFileName);
     }
 }

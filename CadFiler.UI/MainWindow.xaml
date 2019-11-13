@@ -18,13 +18,16 @@
         mc:Ignorable="d"
         Title="CAD Filer"
         MinHeight="300" MinWidth="300" SizeToContent="WidthAndHeight">
+    
     <Grid dd:DragDrop.IsDragSource="True"
           dd:DragDrop.IsDropTarget="True"
           dd:DragDrop.DropHandler="{Binding}">
         <DataGrid x:Name="CadFileDataGrid"
                   ItemsSource="{Binding CadFiles, Mode=OneWay}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  FontSize="16"
+                  SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ファイル名"
                                     Binding="{Binding LogicalFileName}"/>
@@ -34,6 +37,25 @@
                                     Binding="{Binding FileSize}"/>
                 <DataGridTextColumn Header="最終更新日時"
                                     Binding="{Binding Updated}"/>
+
+                <DataGridTemplateColumn Header="操作">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    IsCancel="True"
+                                    Margin="0"
+                                    Padding="0"
+                                    Width="21" Height="21"
+                                    Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding PhysicalFileName.ToString()}">
+                                <materialDesign:PackIcon Kind="Delete"
+                                                         Margin="0"
+                                                         Padding="0"
+                                                         Width="21" Height="21"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
