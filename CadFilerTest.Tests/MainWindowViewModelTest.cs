@@ -1,5 +1,6 @@
 using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
+using CadFiler.Infrastructure.Azure.BlobStorage;
 using CadFiler.UI.ViewModels;
 using ChainingAssertion;
 using GongSolutions.Wpf.DragDrop;
@@ -84,8 +85,10 @@ namespace CadFilerTest.Tests
             var cadFileMock = new Mock<ICadFileRepository>();
             cadFileMock.Setup(x => x.GetFileInfo(@"C:\public\test123.stl")).Returns(fileInfoMock.Object);
 
+            var cadFileStorageMock = new Mock<CadFileStorage>();
+
             var viewModelMock = new Mock<MainWindowViewModel>(
-                null,
+                cadFileStorageMock.Object,
                 cadFileMock.Object,
                 cadFileMetadataMock.Object);
             viewModelMock.Setup(x => x.GetDateTime()).Returns(Convert.ToDateTime("2019/11/10 12:34:56"));
