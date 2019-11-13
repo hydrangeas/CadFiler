@@ -157,7 +157,7 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/07 23:46"));
 
             entities.Where(x => !x.PhysicalFileName.Equals(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"))).ToList();
-            viewModel.Delete("E93ECBD8-EB7F-4478-B99D-C1933EBA3563");
+            viewModel.Delete(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
             viewModel.CadFiles.Count.Is(1);
             viewModel.CadFiles[0].LogicalFileName.Is("abc.stl");
             viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
@@ -167,7 +167,7 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/10 16:25"));
 
             entities.Where(x => !x.PhysicalFileName.Equals(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"))).ToList();
-            viewModel.Delete("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1");
+            viewModel.Delete(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
             viewModel.CadFiles.Count.Is(0);
         }
     }
