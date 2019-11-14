@@ -15,9 +15,17 @@ namespace CadFiler.Infrastructure.Azure.BlobStorage
 
         readonly string ContainerName = "cadfiles";
 
-        public void Download(Guid guid)
+        public Task Download(string savePath, Guid guid)
         {
-            throw new NotImplementedException();
+            return Task.Run(async () =>
+            {
+                var cloudStorageAcccount = CloudStorageAccount.Parse(ConnectionString);
+                var cloudBlobClient = cloudStorageAcccount.CreateCloudBlobClient();
+                var cloudBlobContainer = cloudBlobClient.GetContainerReference(ContainerName);
+
+                var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(guid.ToString());
+                await cloudBlockBlob.DownloadToFileAsync(savePath, System.IO.FileMode.CreateNew);
+            });
         }
 
         /// <summary>

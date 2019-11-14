@@ -9,6 +9,6 @@ namespace CadFile.Domain.Repositories
     public interface ICadFileStorageRepository
     {
         Task Upload(IFileInfo fileInfo, Guid guid);
-        void Download(Guid guid);
+        Task Download(string savePath, Guid guid);
     }
 }

@@ -19,5 +19,8 @@ namespace CadFiler.UI.ViewModels
         public int DisplayOrder => _entity.DisplayOrder;
         public DateTime Created => _entity.Created;
         public DateTime Updated => _entity.Updated;
+
+        public (string, Guid) FileDetail => 
+            (_entity.LogicalFileName, _entity.PhysicalFileName);
     }
 }

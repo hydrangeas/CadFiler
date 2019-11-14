@@ -7,6 +7,7 @@ using GongSolutions.Wpf.DragDrop;
 using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -36,6 +37,7 @@ namespace CadFiler.UI.ViewModels
             _cadFileMetadata = cadFileMetadata;
 
             DeleteCommand = new DelegateCommand<Guid?>(Delete);
+            DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
 
             Update();
         }
@@ -44,6 +46,7 @@ namespace CadFiler.UI.ViewModels
         { get; set; } = new ObservableCollection<MainWindowViewModelCadFile>();
 
         public ICommand DeleteCommand { get; private set; }
+        public ICommand DownloadCommand { get; private set; }
 
         public void DragOver(IDropInfo dropInfo) => dropInfo.Effects = DragDropEffects.Copy;
 
@@ -82,6 +85,16 @@ namespace CadFiler.UI.ViewModels
 
             _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
             Update();
+        }
+
+        public void Download(ValueTuple<string, Guid>? fileDetail)
+        {
+            string savePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                fileDetail.Value.Item1.ToString());
+            var physicalFileName = fileDetail.Value.Item2;
+
+            _cadFileStorage.Download(savePath, physicalFileName);
         }
     }
 }

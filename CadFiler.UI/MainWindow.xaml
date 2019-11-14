@@ -18,7 +18,6 @@
         mc:Ignorable="d"
         Title="CAD Filer"
         MinHeight="300" MinWidth="300" SizeToContent="WidthAndHeight">
-    
     <Grid dd:DragDrop.IsDragSource="False"
           dd:DragDrop.IsDropTarget="True"
           dd:DragDrop.DropHandler="{Binding}">
@@ -41,18 +40,32 @@
                 <DataGridTemplateColumn Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     IsCancel="True"
-                                    Margin="0"
+                                    Margin="5 0 5 0"
+                                    Padding="0"
+                                    Width="21" Height="21"
+                                    Command="{Binding Path=DataContext.DownloadCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding FileDetail}">
+                                    <materialDesign:PackIcon Kind="Download"
+                                                         Margin="0"
+                                                         Padding="0"
+                                                         Width="21" Height="21"/>
+                                </Button>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    IsCancel="True"
+                                    Margin="5 0 5 0"
                                     Padding="0"
                                     Width="21" Height="21"
                                     Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding PhysicalFileName}">
-                                <materialDesign:PackIcon Kind="Delete"
+                                    <materialDesign:PackIcon Kind="Delete"
                                                          Margin="0"
                                                          Padding="0"
                                                          Width="21" Height="21"/>
-                            </Button>
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
