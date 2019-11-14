@@ -14,62 +14,74 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
 
         mc:Ignorable="d"
         Title="CAD Filer"
         MinHeight="300" MinWidth="300" SizeToContent="WidthAndHeight">
-    <Grid dd:DragDrop.IsDragSource="False"
-          dd:DragDrop.IsDropTarget="True"
-          dd:DragDrop.DropHandler="{Binding}">
-        <DataGrid x:Name="CadFileDataGrid"
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid dd:DragDrop.IsDragSource="False"
+              dd:DragDrop.IsDropTarget="True"
+              dd:DragDrop.DropHandler="{Binding}">
+            <DataGrid x:Name="CadFileDataGrid"
                   ItemsSource="{Binding CadFiles, Mode=OneWay}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   FontSize="16"
                   SelectionUnit="FullRow">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ファイル名"
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ファイル名"
                                     Binding="{Binding LogicalFileName}"/>
-                <DataGridTextColumn Header="内部ID"
+                    <DataGridTextColumn Header="内部ID"
                                     Binding="{Binding PhysicalFileName}"/>
-                <DataGridTextColumn Header="ファイルサイズ"
+                    <DataGridTextColumn Header="ファイルサイズ"
                                     Binding="{Binding FileSize}"/>
-                <DataGridTextColumn Header="最終更新日時"
+                    <DataGridTextColumn Header="最終更新日時"
                                     Binding="{Binding Updated}"/>
 
-                <DataGridTemplateColumn Header="操作">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                    <DataGridTemplateColumn Header="操作">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     IsCancel="True"
                                     Margin="5 0 5 0"
                                     Padding="0"
                                     Width="21" Height="21"
                                     Command="{Binding Path=DataContext.DownloadCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding FileDetail}">
-                                    <materialDesign:PackIcon Kind="Download"
+                                        <materialDesign:PackIcon Kind="Download"
                                                          Margin="0"
                                                          Padding="0"
                                                          Width="21" Height="21"/>
-                                </Button>
-                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     IsCancel="True"
                                     Margin="5 0 5 0"
                                     Padding="0"
                                     Width="21" Height="21"
                                     Command="{Binding Path=DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding PhysicalFileName}">
-                                    <materialDesign:PackIcon Kind="Delete"
+                                        <materialDesign:PackIcon Kind="Delete"
                                                          Margin="0"
                                                          Padding="0"
                                                          Width="21" Height="21"/>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid d:IsHidden="True"
+              Background="DarkGray" Opacity="0.8"
+              Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+            <mah:ProgressRing IsActive="True" />
+        </Grid>
     </Grid>
 </Window>

@@ -122,7 +122,6 @@ namespace CadFilerTest.Tests
             dropInfoMock.Setup(x => x.Data).Returns(fileDropList);
 
             viewModel.Drop(dropInfoMock.Object);
-            cadFileMetadataMock.VerifyAll();
         }
 
         [TestMethod]
@@ -184,6 +183,8 @@ namespace CadFilerTest.Tests
             entities.Where(x => !x.PhysicalFileName.Equals(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"))).ToList();
             viewModel.Delete(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
             viewModel.CadFiles.Count.Is(0);
+
+            cadFileMetadataMock.VerifyAll();
         }
     }
 }

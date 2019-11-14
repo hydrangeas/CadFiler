@@ -7,8 +7,10 @@ using GongSolutions.Wpf.DragDrop;
 using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -42,6 +44,16 @@ namespace CadFiler.UI.ViewModels
             Update();
         }
 
+        public bool _isBusy = false;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                SetProperty(ref _isBusy, value);
+            }
+        }
+
         public ObservableCollection<MainWindowViewModelCadFile> CadFiles
         { get; set; } = new ObservableCollection<MainWindowViewModelCadFile>();
 
@@ -50,24 +62,32 @@ namespace CadFiler.UI.ViewModels
 
         public void DragOver(IDropInfo dropInfo) => dropInfo.Effects = DragDropEffects.Copy;
 
-        public void Drop(IDropInfo dropInfo)
+        public async void Drop(IDropInfo dropInfo)
         {
-            dropInfo.Effects = DragDropEffects.Copy;
-            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
-            foreach(var file in dragFileList)
+            IsBusy = true;
+            try
             {
-                var fileInfo = _cadFile.GetFileInfo(file);
-                var physicalFileName = GetNewGuid();
-                _cadFileStorage.Upload(fileInfo, physicalFileName);
-                _cadFileMetadata.Save(
-                    new CadFileEntity(
-                            fileInfo,
-                            physicalFileName,
-                            CadFiles.Count == 0 ? 1 : CadFiles.Max(x => x.DisplayOrder) + 1,
-                            GetDateTime()
-                        ));
+                dropInfo.Effects = DragDropEffects.Copy;
+                var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+                foreach (var file in dragFileList)
+                {
+                    var fileInfo = _cadFile.GetFileInfo(file);
+                    var physicalFileName = GetNewGuid();
+                    await _cadFileStorage.Upload(fileInfo, physicalFileName);
+                    _cadFileMetadata.Save(
+                        new CadFileEntity(
+                                fileInfo,
+                                physicalFileName,
+                                CadFiles.Count == 0 ? 1 : CadFiles.Max(x => x.DisplayOrder) + 1,
+                                GetDateTime()
+                            ));
+                }
+                Update();
             }
-            Update();
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         void Update()
@@ -83,18 +103,34 @@ namespace CadFiler.UI.ViewModels
         {
             if (physicalFileName == null) return;
 
-            _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
-            Update();
+            IsBusy = true;
+            try
+            {
+                _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
+                Update();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         public void Download(ValueTuple<string, Guid>? fileDetail)
         {
-            string savePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                fileDetail.Value.Item1.ToString());
-            var physicalFileName = fileDetail.Value.Item2;
+            IsBusy = true;
+            try
+            {
+                string savePath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                    fileDetail.Value.Item1.ToString());
+                var physicalFileName = fileDetail.Value.Item2;
 
-            _cadFileStorage.Download(savePath, physicalFileName);
+                _cadFileStorage.Download(savePath, physicalFileName);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

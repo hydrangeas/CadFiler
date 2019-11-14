@@ -19,11 +19,7 @@ namespace CadFiler.UI.ViewModels
             }
 
             field = value;
-            var h = this.PropertyChanged;
-            if (h != null)
-            {
-                h(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
             return true;
         }
