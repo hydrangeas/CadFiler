@@ -63,14 +63,27 @@ namespace CadFiler.UI.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand DownloadCommand { get; private set; }
 
-        public void DragOver(IDropInfo dropInfo) => dropInfo.Effects = DragDropEffects.Copy;
+        public void DragOver(IDropInfo dropInfo)
+        {
+            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            foreach (var file in dragFileList)
+            {
+                var fileAttributes = File.GetAttributes(file);
+                if (fileAttributes.HasFlag(FileAttributes.Directory))
+                {
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
+            }
+            dropInfo.Effects = DragDropEffects.Copy;
+        }
 
         public async void Drop(IDropInfo dropInfo)
         {
             IsBusy = true;
             try
             {
-                dropInfo.Effects = DragDropEffects.Copy;
+                dropInfo.Effects = DragDropEffects.All;
                 var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
                 foreach (var file in dragFileList)
                 {
