@@ -170,7 +170,7 @@ namespace CadFilerTest.Tests
                                                       .ToList();
                                    cadFileMetadataMock.Setup(x => x.GetData()).Returns(entities);
                                });
-            viewModel.Delete(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
+            viewModel.DeleteAsync(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
 
             viewModel.CadFiles.Count.Is(1);
             viewModel.CadFiles[0].LogicalFileName.Is("abc.stl");
@@ -181,7 +181,7 @@ namespace CadFilerTest.Tests
             viewModel.CadFiles[0].Updated.Is(Convert.ToDateTime("2019/11/10 16:25"));
 
             entities.Where(x => !x.PhysicalFileName.Equals(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"))).ToList();
-            viewModel.Delete(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
+            viewModel.DeleteAsync(new Guid("8D3B5BE6-EF75-4FA4-9D9A-FCAA9D8875C1"));
             viewModel.CadFiles.Count.Is(0);
 
             cadFileMetadataMock.VerifyAll();

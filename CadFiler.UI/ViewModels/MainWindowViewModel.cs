@@ -40,7 +40,7 @@ namespace CadFiler.UI.ViewModels
             _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
 
-            DeleteCommand = new DelegateCommand<Guid?>(Delete);
+            DeleteCommand = new DelegateCommand<Guid?>(DeleteAsync);
             DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
 
             Update();
@@ -89,9 +89,7 @@ namespace CadFiler.UI.ViewModels
             }
             catch(Exception ex)
             {
-                errorMessage = ex.Message;
-                await DialogHost.Show(new OkDialog());
-                errorMessage = string.Empty;
+                await ShowErrorDialog(ex);
             }
             finally
             {
@@ -108,7 +106,15 @@ namespace CadFiler.UI.ViewModels
             }
         }
 
-        public void Delete(Guid? physicalFileName)
+        async Task ShowErrorDialog(Exception ex)
+        {
+            errorMessage = ex.Message;
+            await DialogHost.Show(new OkDialog());
+            errorMessage = string.Empty;
+
+        }
+
+        public async void DeleteAsync(Guid? physicalFileName)
         {
             if (physicalFileName == null) return;
 
@@ -118,13 +124,17 @@ namespace CadFiler.UI.ViewModels
                 _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
                 Update();
             }
+            catch (Exception ex)
+            {
+                await ShowErrorDialog(ex);
+            }
             finally
             {
                 IsBusy = false;
             }
         }
 
-        public void Download(ValueTuple<string, Guid>? fileDetail)
+        public async void Download(ValueTuple<string, Guid>? fileDetail)
         {
             IsBusy = true;
             try
@@ -134,7 +144,11 @@ namespace CadFiler.UI.ViewModels
                     fileDetail.Value.Item1.ToString());
                 var physicalFileName = fileDetail.Value.Item2;
 
-                _cadFileStorage.Download(savePath, physicalFileName);
+                await _cadFileStorage.Download(savePath, physicalFileName);
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorDialog(ex);
             }
             finally
             {
