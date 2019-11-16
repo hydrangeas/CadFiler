@@ -3,7 +3,9 @@ using CadFile.Domain.Repositories;
 using CadFiler.Infrastructure.Azure.BlobStorage;
 using CadFiler.Infrastructure.LocalDB;
 using CadFiler.Infrastructure.LocalFile;
+using CadFiler.UI.Views;
 using GongSolutions.Wpf.DragDrop;
+using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
@@ -53,6 +55,7 @@ namespace CadFiler.UI.ViewModels
                 SetProperty(ref _isBusy, value);
             }
         }
+        public string errorMessage { get; set; } = string.Empty;
 
         public ObservableCollection<MainWindowViewModelCadFile> CadFiles
         { get; set; } = new ObservableCollection<MainWindowViewModelCadFile>();
@@ -83,6 +86,12 @@ namespace CadFiler.UI.ViewModels
                             ));
                 }
                 Update();
+            }
+            catch(Exception ex)
+            {
+                errorMessage = ex.Message;
+                await DialogHost.Show(new OkDialog());
+                errorMessage = string.Empty;
             }
             finally
             {
