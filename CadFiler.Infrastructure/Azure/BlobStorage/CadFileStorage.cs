@@ -1,9 +1,11 @@
 ﻿using CadFile.Domain.Repositories;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +13,28 @@ namespace CadFiler.Infrastructure.Azure.BlobStorage
 {
     public class CadFileStorage : ICadFileStorageRepository
     {
-        readonly string ConnectionString = "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;";
+        public string _connectionString = string.Empty;
+        public string ConnectionString
+        {
+            get
+            {
+                if (_connectionString == string.Empty)
+                {
+                    var configuration = new ConfigurationBuilder()
+                        .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
+#if DEBUG
+                        .AddJsonFile(@"applicationsettings.debug.json")
+#else
+                        // NEED: Create following file,
+                        //       and set "copy output directory: Always"
+                        .AddJsonFile(@"applicationsettings.json")
+#endif
+                        .Build();
+                    _connectionString = configuration.GetConnectionString("Azure.BlobStorage");
+                }
+                return _connectionString;
+            }
+        }
 
         readonly string ContainerName = "cadfiles";
 

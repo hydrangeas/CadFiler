@@ -1,5 +1,6 @@
 ﻿using CadFile.Domain.Entities;
 using CadFile.Domain.Repositories;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,29 @@ namespace CadFiler.Infrastructure.LocalDB
 {
     public class CadFileMetadata : ICadFileMetadataRepository
     {
-        readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ower\source\repos\CadFiler\CadFiler.Infrastructure\LocalDB\SampleData\CadFile.mdf;Integrated Security=True";
+        public string _connectionString = string.Empty;
+        public string ConnectionString
+        {
+            get
+            {
+                if (_connectionString == string.Empty)
+                {
+                    var configuration = new ConfigurationBuilder()
+                        .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
+#if DEBUG
+                        .AddJsonFile(@"applicationsettings.debug.json")
+#else
+                        // NEED: Create following file,
+                        //       and set "copy output directory: Always"
+                        .AddJsonFile(@"applicationsettings.json")
+#endif
+                        .Build();
+                    _connectionString = configuration.GetConnectionString("LocalDB");
+                }
+                return _connectionString;
+            }
+        }
+
 
         public IReadOnlyList<CadFileEntity> GetData()
         {
