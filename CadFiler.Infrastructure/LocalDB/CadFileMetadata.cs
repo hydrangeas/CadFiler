@@ -22,13 +22,15 @@ namespace CadFiler.Infrastructure.LocalDB
                         .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
 #if DEBUG
                         .AddJsonFile(@"applicationsettings.debug.json")
+                        .Build();
+                    _connectionString = configuration.GetConnectionString("LocalDB");
 #else
                         // NEED: Create following file,
                         //       and set "copy output directory: Always"
                         .AddJsonFile(@"applicationsettings.json")
-#endif
                         .Build();
-                    _connectionString = configuration.GetConnectionString("LocalDB");
+                    _connectionString = configuration.GetConnectionString("Azure.SQLDatabase");
+#endif
                 }
                 return _connectionString;
             }
