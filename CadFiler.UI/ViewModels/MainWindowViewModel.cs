@@ -3,8 +3,10 @@ using CadFile.Domain.Repositories;
 using CadFiler.Infrastructure.Azure.BlobStorage;
 using CadFiler.Infrastructure.LocalDB;
 using CadFiler.Infrastructure.LocalFile;
+using CadFiler.Infrastructure.log4net;
 using CadFiler.UI.Views;
 using GongSolutions.Wpf.DragDrop;
+using log4net;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using System;
@@ -23,22 +25,26 @@ namespace CadFiler.UI.ViewModels
         private ICadFileStorageRepository _cadFileStorage;
         private ICadFileRepository _cadFile;
         private ICadFileMetadataRepository _cadFileMetadata;
+        private ILoggerRepository _logger;
         public MainWindowViewModel()
             : this(
                   new CadFileStorage(),
                   new CadFiles(),
-                  new CadFileMetadata())
+                  new CadFileMetadata(),
+                  new Logger())
         {
 
         }
         public MainWindowViewModel(
             ICadFileStorageRepository cadFileStorage,
             ICadFileRepository cadFile,
-            ICadFileMetadataRepository cadFileMetadata)
+            ICadFileMetadataRepository cadFileMetadata,
+            ILoggerRepository logger)
         {
             _cadFileStorage = cadFileStorage;
             _cadFile = cadFile;
             _cadFileMetadata = cadFileMetadata;
+            _logger = logger;
 
             DeleteCommand = new DelegateCommand<Guid?>(DeleteAsync);
             DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
@@ -71,9 +77,11 @@ namespace CadFiler.UI.ViewModels
                 var fileAttributes = File.GetAttributes(file);
                 if (fileAttributes.HasFlag(FileAttributes.Directory))
                 {
+                    _logger.GetLogger().Info($"[DragOver] {file} (Directory)");
                     dropInfo.Effects = DragDropEffects.None;
                     return;
                 }
+                _logger.GetLogger().Info($"[DragOver] {file} (File)");
             }
             dropInfo.Effects = DragDropEffects.Copy;
         }
@@ -88,8 +96,10 @@ namespace CadFiler.UI.ViewModels
                 foreach (var file in dragFileList)
                 {
                     var fileInfo = _cadFile.GetFileInfo(file);
+                    _logger.GetLogger().Info($"[Drop] {file} is processing..");
                     var physicalFileName = GetNewGuid();
                     await _cadFileStorage.Upload(fileInfo, physicalFileName);
+                    _logger.GetLogger().Info($"[Drop] {file} is uploaded");
                     _cadFileMetadata.Save(
                         new CadFileEntity(
                                 fileInfo,
@@ -97,11 +107,13 @@ namespace CadFiler.UI.ViewModels
                                 CadFiles.Count == 0 ? 1 : CadFiles.Max(x => x.DisplayOrder) + 1,
                                 GetDateTime()
                             ));
+                    _logger.GetLogger().Info($"[Drop] {file} is registered");
                 }
                 Update();
             }
             catch(Exception ex)
             {
+                _logger.GetLogger().Error($"[Drop] {ex.StackTrace}");
                 await ShowErrorDialog(ex);
             }
             finally
@@ -135,10 +147,12 @@ namespace CadFiler.UI.ViewModels
             try
             {
                 _cadFileMetadata.Delete(physicalFileName.GetValueOrDefault());
+                _logger.GetLogger().Info($"[DeleteAsync] {physicalFileName.GetValueOrDefault()} is deleted");
                 Update();
             }
             catch (Exception ex)
             {
+                _logger.GetLogger().Error($"[DeleteAsync] {ex.StackTrace}");
                 await ShowErrorDialog(ex);
             }
             finally
@@ -158,9 +172,11 @@ namespace CadFiler.UI.ViewModels
                 var physicalFileName = fileDetail.Value.Item2;
 
                 await _cadFileStorage.Download(savePath, physicalFileName);
+                _logger.GetLogger().Info($"[DeleteAsync] {physicalFileName} is downloaded");
             }
             catch (Exception ex)
             {
+                _logger.GetLogger().Error($"[Download] {ex.StackTrace}");
                 await ShowErrorDialog(ex);
             }
             finally

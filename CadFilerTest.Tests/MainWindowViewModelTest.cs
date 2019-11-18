@@ -45,7 +45,7 @@ namespace CadFilerTest.Tests
                 ));
             cadFileMock.Setup(x => x.GetData()).Returns(entities);
 
-            var viewModel = new MainWindowViewModel(null, null, cadFileMock.Object);
+            var viewModel = new MainWindowViewModel(null, null, cadFileMock.Object, null);
             viewModel.CadFiles.Count.Is(2);
 
             viewModel.CadFiles[0].LogicalFileName.Is("test.stl");
@@ -90,7 +90,8 @@ namespace CadFilerTest.Tests
             var viewModelMock = new Mock<MainWindowViewModel>(
                 cadFileStorageMock.Object,
                 cadFileMock.Object,
-                cadFileMetadataMock.Object);
+                cadFileMetadataMock.Object,
+                null);
             viewModelMock.Setup(x => x.GetDateTime()).Returns(Convert.ToDateTime("2019/11/10 12:34:56"));
             viewModelMock.Setup(x => x.GetNewGuid()).Returns(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
             var viewModel = viewModelMock.Object;
@@ -149,7 +150,7 @@ namespace CadFilerTest.Tests
                 ));
             cadFileMetadataMock.Setup(x => x.GetData()).Returns(entities);
             
-            var viewModel = new MainWindowViewModel(null, null, cadFileMetadataMock.Object);
+            var viewModel = new MainWindowViewModel(null, null, cadFileMetadataMock.Object, null);
             viewModel.CadFiles.Count.Is(2);
             viewModel.CadFiles[0].LogicalFileName.Is("test.stl");
             viewModel.CadFiles[0].PhysicalFileName.Is(new Guid("E93ECBD8-EB7F-4478-B99D-C1933EBA3563"));
