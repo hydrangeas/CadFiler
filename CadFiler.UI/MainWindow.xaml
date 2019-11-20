@@ -20,6 +20,10 @@
         mc:Ignorable="d"
         Title="CAD Filer"
         MinHeight="300" MinWidth="300" SizeToContent="WidthAndHeight">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding UpdateCommand}"
+                    Gesture="F5"/>
+    </Window.InputBindings>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>

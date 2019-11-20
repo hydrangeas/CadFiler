@@ -48,6 +48,7 @@ namespace CadFiler.UI.ViewModels
 
             DeleteCommand = new DelegateCommand<Guid?>(DeleteAsync);
             DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
+            UpdateCommand = new DelegateCommand(Update);
 
             Update();
         }
@@ -68,6 +69,7 @@ namespace CadFiler.UI.ViewModels
 
         public ICommand DeleteCommand { get; private set; }
         public ICommand DownloadCommand { get; private set; }
+        public ICommand UpdateCommand { get; private set; }
 
         public void DragOver(IDropInfo dropInfo)
         {
