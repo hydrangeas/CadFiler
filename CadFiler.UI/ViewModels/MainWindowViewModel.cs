@@ -50,7 +50,7 @@ namespace CadFiler.UI.ViewModels
             DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
             UpdateCommand = new DelegateCommand(Update);
 
-            Update();
+            UpdateCommand.Execute(null);
         }
 
         public bool _isBusy = false;
