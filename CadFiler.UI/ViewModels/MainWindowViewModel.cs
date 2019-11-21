@@ -47,7 +47,7 @@ namespace CadFiler.UI.ViewModels
             _logger = logger;
 
             DeleteCommand = new DelegateCommand<Guid?>(DeleteAsync);
-            DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(Download);
+            DownloadCommand = new DelegateCommand<ValueTuple<string, Guid>?>(DownloadAsync);
             UpdateCommand = new DelegateCommand(Update);
 
             UpdateCommand.Execute(null);
@@ -163,7 +163,7 @@ namespace CadFiler.UI.ViewModels
             }
         }
 
-        public async void Download(ValueTuple<string, Guid>? fileDetail)
+        public async void DownloadAsync(ValueTuple<string, Guid>? fileDetail)
         {
             IsBusy = true;
             try
